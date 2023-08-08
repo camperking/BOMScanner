@@ -1,0 +1,100 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
+  "package": {
+    "productName": "BOMScannerGUI",
+    "version": "0.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "execute": true,
+        "open": true,
+        "scope": [
+            {
+                "name": "bom-scanner-service",
+                "cmd": "python",
+                "args": ["/home/campi/coding/ML/BOMScanner/BOMScannerService/server.py"]
+            },
+            {
+                "name": "img-server",
+                "cmd": "python",
+                "args": ["-m", "http.server", "1421", "--directory", "/home/campi/.local/share/net.xdevbox.bomscannergui/img"]
+            },
+            {
+                "name": "python",
+                "cmd": "python",
+                "args": [{ "validator": "[\\w\\d./-]" }]
+            },
+            {
+                "name": "rtmp-stream",
+                "cmd": "ffmpeg",
+                "args": ["-f", "v4l2", "-video_size", "hd720", "-i", "/dev/video0","-c:v", "libx264", "-b:v", "25000k", "-preset", "ultrafast", "-tune", "zerolatency", "-f", "flv", "rtmp://10.232.56.91/live/stream"]
+            }
+        ]
+      },
+      "fs": {
+        "all": true,
+        "exists": true,
+        "readFile": true,
+        "writeFile": true,
+        "createDir": true,
+        "copyFile": true,
+        "scope": ["$APPDATA/**"],
+        "readDir": true,
+        "removeDir": true,
+        "removeFile": true
+      },
+      "path": {
+        "all": true
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["file://**"]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "net.xdevbox.bomscannergui",
+      "targets": "all"
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "BOMScannerGUI",
+        "width": 1280,
+        "height": 1024
+      }
+    ]
+  }
+}
